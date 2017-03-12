@@ -111,18 +111,61 @@ class CourseInformation extends Component {
       }
     };
 
-    const message = "Keep up the good work!";
+    const hasAssignments = this.props.data.grades.find(grade => grade.type === 'ASSIGNMENT');
+    const hasQuizzes = this.props.data.grades.find(grade => grade.type === 'QUIZ');
+    const hasExams = this.props.data.grades.find(grade => grade.type === 'EXAM');
+
+    const buttons = (
+      <div className="ButtonList">
+        <Button onClick={this.setFilterAll}
+                hollow={this.state.filter === 'ALL' ? 'hollow' : ''}>
+          All
+        </Button>
+
+        <Button onClick={this.setFilterAssignments}
+                hollow={this.state.filter === 'ASSIGNMENT' ? 'hollow' : ''}
+                disabled={hasAssignments ? '' : 'disabled'}>
+          Assignments
+        </Button>
+
+
+        <Button onClick={this.setFilterQuizzes}
+                hollow={this.state.filter === 'QUIZ' ? 'hollow' : ''}
+                disabled={hasQuizzes ? '' : 'disabled'}>
+          Quizzes
+        </Button>
+
+        <Button onClick={this.setFilterExams}
+                hollow={this.state.filter === 'EXAM' ? 'hollow' : ''}
+                disabled={hasExams ? '' : 'disabled'}>
+          Exams
+        </Button>
+      </div>
+    );
+
+
+    var message;
+
+    if (this.props.data.overall_grade > 60) {
+      message = (
+        <Callout color="success">
+          <p>Keep up the good work!</p>
+        </Callout>
+      );
+    } else {
+      message = (
+        <Callout color="warning">
+          <p>For information on study groups, look <a href="#">here</a></p>
+        </Callout>
+      );
+    }
 
     return (
       <div className="CourseInformation">
       <Callout color="secondary" >
         <h3>{this.props.data.name + ' (' + this.props.data.course_code + ')'}</h3>
-        <div className="ButtonList">
-          <Button onClick={this.setFilterAll}>All</Button>
-          <Button onClick={this.setFilterAssignments}>Assignments</Button>
-          <Button onClick={this.setFilterQuizzes}>Quizzes</Button>
-          <Button onClick={this.setFilterExams}>Exams</Button>
-        </div>
+
+        { buttons }
 
         <div>
           <Line data={chartData}
@@ -137,9 +180,7 @@ class CourseInformation extends Component {
           </Row>
         </Callout>
 
-        <Callout color="success">
-          <p>{ message }</p>
-        </Callout>
+        { message }
       </Callout>
       </div>
     )
