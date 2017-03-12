@@ -1,0 +1,8 @@
+.StudentSelection {
+  margin: auto;
+  width: 50%;
+}
+
+.StudentSelection select {
+  margin: 10px;
+}
